@@ -1,0 +1,118 @@
+---
+title: 'TFM_Metodología_Simulación Etnia'
+author: "Jone Renteria"
+output: 
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: '4'
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: '4'
+subtitle: Análisis de la relación entre los biomarcadores asociados al estrés y variables sociodemográficas para analizar las diferencias entre grupos étnicos 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE, comment = NULL, cache = TRUE, 
+                     message = FALSE, warning = FALSE, fig.width = 3.5,
+                     fig.height = 3.5, fig_caption = TRUE,  fig.align='center')
+```
+
+```{r include=FALSE}
+library(readxl)
+library(dplyr)
+library(tidyr)
+```
+
+```{r include=FALSE}
+data1 <- as.data.frame(read_excel(paste0(getwd(),"/Data/","DATABASE.xlsx"))) 
+
+factor <- c('id', 'gender', 'disease', 'med.type', 'oral.cont' , 'stimulus.type', 
+            'co.meas', 'oxt.meas', 'co.res')
+num <- c('age', 'PANSS_positive', 'PANSS_negative', 'PANSS_general', 'med.dos',
+         'co.pre', 'co.post', 'oxt.pre', 'oxt.post', 'co.reac', 'hr.bas', 
+         'hr.post', 'arousal_level', 'valence_level')
+data1[factor] <- lapply(data1[factor], as.factor)
+data1[num] <- lapply(data1[num], as.numeric)
+sapply(data1, class) # check transformation 
+```
+
+```{r include=FALSE}
+#ETNIA simulation based on US Census for MD state
+etn<-c(rep("white",42),
+       rep("hispanic",9),
+       rep("afro-american",25),
+       rep("other",8))
+set.seed(00000)
+etn <- sample(etn)
+```
+
+```{r include=FALSE}
+#OXT
+data.oxt <- data1 %>%
+  bind_cols(etn) %>%
+  rename(eth='...24') %>%
+  mutate(eth=as.factor(eth)) %>%
+  filter(oxt.meas==1) 
+
+sapply(data.oxt, class) # check transformation
+
+
+# oxt Models 
+mod.oxt3.1 <- lm(log(oxt.post) ~ log(age) + stimulus.type + log(oxt.pre) 
+                 + log(hr.bas) + eth , data= data.oxt)
+summary(mod.oxt3.1)
+#MASS::stepAIC(mod.oxt3.1, direction = "both")
+res <- model.matrix(~eth, data = data.oxt)
+head(res[, -1])
+```
+
+```{r section 3.2_cortisol, include=FALSE}
+data.co <- data1 %>%
+  select(-PANSS_general, -PANSS_negative, -PANSS_positive, -oxt.meas, -oxt.pre, -oxt.post, -arousal_level, -valence_level)
+adj1 <- data.co %>%
+  filter(co.meas=='2') %>%
+  mutate(co.pre = co.pre*0.025, 
+         co.post = co.post*0.025)   
+data.co <- data.co %>%
+  filter(co.meas!='2') %>%
+  bind_rows(adj1)
+
+data.co <- data.co %>%
+  mutate(diff = co.post - co.pre,
+         co.reac = round(diff*100/co.pre, 2), # generate co.reac for every observation
+         med.dos= if_else(med.type=='0', 0, med.dos), #imput valores med.dos
+         co.res =if_else(co.reac < 15, 1, 2),  #input co.reac 
+         co.res = as.factor(co.res)) %>%   
+  select(-diff) %>%
+  bind_cols(etn) %>%
+  rename(eth='...16') %>%
+  mutate(eth=as.factor(eth)) 
+
+# CO saliva sample
+data.co.slv <- data.co %>%
+  filter(co.meas==1)
+
+mod.co.slv3.1 <- lm(log(co.post) ~ log(co.pre) + log(co.reac) + eth, data= data.co.slv )
+summary(mod.co.slv3.1)
+
+
+# CO serum sample
+data.co.sngr <- data.co %>%
+  filter(co.meas==2)
+
+mod.co.sngr3.1 <- lm(log(co.post) ~ co.pre + age  + co.reac + med.dos + eth, data= data.co.sngr )
+summary(mod.co.sngr3.1)
+
+## CO complete sample 
+#mod.co3.1 <- lm(log(co.post) ~ log(co.pre) + log(co.reac)+ eth, data=data.co)
+#summary(mod.co3.1)
+```
