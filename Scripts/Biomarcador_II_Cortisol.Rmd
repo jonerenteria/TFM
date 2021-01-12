@@ -101,7 +101,7 @@ ggplot(data.co.plot.copost, aes(x=predictor,y=value)) +
         plot.title = element_text(hjust = 0.5))+
   ggtitle("Co.post - variable respuesta") +
   labs(y="Nivel de cortisol tras el estímulo (pg/ml)") +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/Co_post_general.png"), last_plot(),width = 3.5, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/Co_post_general.png"), last_plot(),width = 3.5, height = 3.5,"png")
 ```
 
 En el gráfico se observa que la variable respuesta podría estar sesgada, y que tiene un valor *outlier* (influyente),que hace referencia al valor máximo de la variable en el conjunto de datos, con un valor de 5205.0 pg/ml, tal y como se observa en la siguiente tabla (Tabla XXX). Además de este valor, en la tabla se recogen otros valores significativos de la variable *co.post* (el valor mínimo, la mediana, la media -junto con la desviación estándar- y los cuantiles Q1 y Q3). La media de los participantes es de 1591.4 pg/ml, con una desviación estándar de 1140.5.  
@@ -241,7 +241,7 @@ ggplot(cat.co, aes( x=variable, y=obs, fill=factor)) +
         legend.position = "bottom", 
         legend.text = element_text(size = 8.5))+
   geom_text(aes(label = obs), position =  position_dodge(0.9), size=4.5) +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/co_predictors_general.png"), last_plot(),width = 6, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/co_predictors_general.png"), last_plot(),width = 6, height = 3.5,"png")
 ```
 
 Del mismo modo que en los apartados anteriores se ha mostrado la variable respuesta, a continuación se muestra la distribución de las variables numéricas contínuas según el tipo de estímulo aplicado sobre ellas.  
@@ -274,7 +274,7 @@ ggplot(data.co.plot, aes(x=predictor,y=value, fill=stimulus.type)) +
         legend.title = element_blank(), 
         legend.position = "bottom")+
   scale_fill_discrete(name = "Estímulo", labels = c("Ninguno", "Psicológico", "Físico")) +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/predictors_general_onebyone.png"), last_plot(),width = 3.5, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/predictors_general_onebyone.png"), last_plot(),width = 3.5, height = 3.5,"png")
 
 ```
 
@@ -328,7 +328,7 @@ ggplot(data.co.plot.age, aes(x=predictor,y=value, fill=stimulus.type)) +
   ggtitle("Edad participantes") +
   ylab("Edad participantes (años)") +
   scale_fill_discrete( labels = c("Ninguno", "Psicológico", "Físico")) + 
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/Co_age_general.png"), last_plot(),width = 6, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/Co_age_general.png"), last_plot(),width = 6, height = 3.5,"png")
   
 ```
 
@@ -555,7 +555,7 @@ ggplot(data.co.plot.copost.sngr, aes(x=predictor,y=value)) +
         plot.title = element_text(hjust = 0.5), 
         title =element_text(size=9.5, face='bold'))+
   labs(y="Nivel de cortisol tras el estímulo (pg/ml)") +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/CO_post_sangre.png"), last_plot(),width = 3.5, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/CO_post_sangre.png"), last_plot(),width = 3.5, height = 3.5,"png")
 ```
 
 ```{r include=FALSE}
@@ -623,7 +623,7 @@ ggplot(data.co.plot.sngr, aes(x=predictor,y=value)) +
         legend.title = element_blank(), 
         legend.position = "bottom")+
   scale_fill_discrete(name = "Estímulo", labels = c("Ninguno", "Música alto tempo")) +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/CO_predictores_sangre.png"), last_plot(),width = 3.5, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/CO_predictores_sangre.png"), last_plot(),width = 3.5, height = 3.5,"png")
 ```
 
 Respecto a la distribución normal de estas variables, sin aplicar ninguna transformación sobre ellas, la única variable significativa al 5% es *co.pre*, con un p-valor ligeramente superior al 5% (p-valor=0.083) y por lo tanto se aceptaría la distribución normal sobre ella. En la figura XXX se observa que no parece que esta variable esté sesgada, ya que la distribución en el gráfico de cajas parece muy similar tanto encima como debajo de la mediana. Si las variables se transforman logarítmicamente, la única variable no significativa al 5% es *med.dos*, con un p-valor=0.01. La distribución de estas variables se muestra en los siguientes gráficos: 
@@ -793,7 +793,7 @@ ggplot(data.co.plot.copost.slv, aes(x=predictor,y=value)) +
         plot.title = element_text(hjust = 0.5))+
   ggtitle("Co.post - variable respuesta - Saliva") +
   labs(y="Nivel de cortisol tras el estímulo (pg/ml)") +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/CO_post_saliva.png"), last_plot(),width = 3.50, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/CO_post_saliva.png"), last_plot(),width = 3.50, height = 3.5,"png")
 ```
 
 ```{r include=FALSE}
@@ -862,7 +862,7 @@ ggplot(data.co.plot.slv, aes(x=predictor,y=value, fill=stimulus.type)) +
         legend.title = element_blank(), 
         legend.position = "bottom")+
   scale_fill_discrete(name = "Estímulo", labels = c("Ninguno", "Físico")) +
-  ggsave(filename = paste0(getwd(),"/Scripts/Figures/CO_preditors_saliva.png"), last_plot(),width = 6, height = 3.5,"png")
+  ggsave(filename = paste0(getwd(),"/Figures/CO_preditors_saliva.png"), last_plot(),width = 6, height = 3.5,"png")
 ```
 
 ```{r include=FALSE}
